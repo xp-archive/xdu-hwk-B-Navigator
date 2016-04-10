@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>B-Navigator</title>
+    <!--
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    -->
+    <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="static/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h4>B-Navigator</h4>
+    <form id="myform">
+        <div class="form-group">
+            <label for="start_name">入口</label>
+            <input type="text" class="form-control" id="start_name" name="start_name">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-start">选择</button>
+        </div>
+        <div class="form-group">
+            <label for="end_name">目标</label>
+            <input type="text" class="form-control" id="end_name" name="end_name">
+        </div>
+        <button type="submit" class="btn btn-default">查询</button>
+    </form>
+    <hr/>
+    <div>
+        <ul id="myret">
+        </ul>
+    </div>
+</div>
+
+<div class="modal" id="modal-start" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="form-start">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="label-start">入口</h4>
+                </div>
+                <div class="modal-body">
+                    <img src="static/entry.png"/>
+                    <select id="select-name" class="form-control">
+                        <option value="">(请选择)</option>
+                        <optgroup label="宿舍区">
+                            <option value="竹园">竹园</option>
+                            <option value="海棠">海棠</option>
+                            <option value="丁香">丁香</option>
+                        </optgroup>
+                        <optgroup label="指定入口">
+                            <option value="入口1">入口1</option>
+                            <option value="入口2">入口2</option>
+                            <option value="入口3">入口3</option>
+                            <option value="入口4">入口4</option>
+                            <option value="入口5">入口5</option>
+                            <option value="入口6">入口6</option>
+                            <option value="入口7">入口7</option>
+                            <option value="入口8">入口8</option>
+                            <option value="入口9">入口9</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    #img-map {
+        width: 100%;
+    }
+</style>
+
+<div class="modal" id="modal-map" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <img id="img-map" src="" data-dismiss="modal"/>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $('#form-start').on('submit', function() {
+            $('#start_name').val($('#select-name').val());
+            $('#modal-start').modal('hide');
+            return false;
+        });
+        $('#myform').on('submit', function() {
+            $.ajax({
+                url: 'get.php',
+                method: 'get',
+                data: {
+                    'start_name': '入口1',
+                    'end_name': '433'
+                },
+                dataType: 'json',
+                success: function(ret) {
+                    console.log(ret);
+                    mapshow(ret);
+                }
+            });
+            return false;
+        });
+
+        function mapshow(ret) {
+            var $ul = $('#myret');
+            $ul.empty();
+            for (var i = 0; i < ret.path.length; ++i) {
+                var $li = $('<li></li>');
+                var $a = $('<a></a>');
+                $a.attr('href', '#');
+                $a.data('src', 'static/' + ret.path[i][1] + '.png');
+                $a.on('click', function() {
+                    $('#img-map').attr('src', $(this).data('src'));
+                    $('#modal-map').modal('show');
+                });
+                $a.text(ret.path[i][0]);
+                $li.append($a);
+                $ul.append($li);
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
