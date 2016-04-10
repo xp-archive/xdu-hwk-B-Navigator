@@ -133,7 +133,7 @@
                 $a.attr('href', '#');
                 $a.data('src', 'static/' + ret.path[i][1] + '.png');
                 $a.on('click', function() {
-                    $('#img-map').attr('src', $(this).data('src'));
+                    $('#img-map').attr('src', '').attr('src', $(this).data('src'));
                     $('#modal-map').modal('show');
                 });
                 $a.text(ret.path[i][0]);
