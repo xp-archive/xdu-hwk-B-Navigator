@@ -17,8 +17,8 @@ $distance = require "{$strategy}/distance.php";
 $path = require "{$strategy}/path.php";
 $name2sn = require "name2sn.php";
 
-$a_name = get('from', '入口1');
-$b_name = get('to', '443');
+$a_name = get('start', '入口1');
+$b_name = get('end', '443');
 
 function add_id_to_array(&$arr, $name) {
     global $name2id;
