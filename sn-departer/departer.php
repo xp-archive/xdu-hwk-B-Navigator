@@ -183,10 +183,10 @@ function add_name($value, $key, $user) {
         $value .= "-{$user['level']}";
     }
     if (strpos($value, '南北') === 0) {
-        $user['sn'] = 's';
+        if ($user['sn'] != 's') return ;
     }
     if (strpos($value, '北南') === 0) {
-        $user['sn'] = 'n';
+        if ($user['sn'] != 'n') return ;
     }
     $departer[$value] = $user['sn'].$user['level'];
 }

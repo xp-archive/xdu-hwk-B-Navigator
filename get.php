@@ -66,12 +66,12 @@ $end_name = $id2name[$end_id];
 
 $ret = [];
 array_push($ret, [$start_name, $name2sn[$start_name]]);
-if ($cost !== PHP_INT_MAX) {
+if ($cost != PHP_INT_MAX) {
     $o_id = $start_id;
     $c_id = $start_id;
     while (true) {
         $c_id = $path[$o_id][$end_id];
-        if ($o_id === $end_id) break;
+        if ($c_id === $end_id) break;
 
         $c_name = $id2name[$c_id];
         if (in_array(mb_substr($c_name, 0, 2), ['入口', '楼梯', '电梯', '南北', '北南'])) {
