@@ -29,8 +29,8 @@
     <h3>B-Navigator</h3>
     <div>
         <h5 id="ret-name">结果将在这里显示.</h5>
-        <ul id="myret">
-        </ul>
+        <table id="myret" class="table table-bordered table-striped">
+        </table>
     </div>
     <hr/>
     <form id="myform">
@@ -135,7 +135,8 @@
             var $tbl = $('#myret');
             $tbl.empty();
             for (var i = 0; i < ret.path.length; ++i) {
-                var $li = $('<li></li>');
+                var $tr = $('<tr></tr>');
+                var $td = $('<td></td>');
                 var $a = $('<a></a>');
                 $a.addClass('btn btn-block');
                 $a.data('src', 'static/' + ret.path[i][1] + '.png');
@@ -144,8 +145,9 @@
                     $('#modal-map').modal('show');
                 });
                 $a.text(ret.path[i][0]);
-                $li.append($a);
-                $tbl.append($li);
+                $td.append($a);
+                $tr.append($td);
+                $tbl.append($tr);
             }
 
             $('#ret-name').val('大概路程: ' + ret.cost + '步');
