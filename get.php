@@ -30,8 +30,8 @@ function add_id_to_array(&$arr, $name) {
 function name2id($name) {
     $ret = [];
     if (is_numeric($name)) {
-        add_id_to_array($ret, "{$name}前");
-        add_id_to_array($ret, "{$name}后");
+        add_id_to_array($ret, "{$name}西");
+        add_id_to_array($ret, "{$name}东");
     } else {
         add_id_to_array($ret, $name);
     }
@@ -40,6 +40,8 @@ function name2id($name) {
 
 $a_ids = name2id($a_name);
 $b_ids = name2id($b_name);
+
+//var_export($b_ids); die();
 
 $start_id = -1;
 $end_id = -1;
@@ -55,6 +57,10 @@ foreach ($a_ids as $a_id) {
     }
 }
 
+if ($start_id == -1 || $end_id == -1) {
+    die(json_encode(['code' => 1]));
+}
+
 $start_name = $id2name[$start_id];
 $end_name = $id2name[$end_id];
 
@@ -68,13 +74,15 @@ if ($cost !== PHP_INT_MAX) {
         if ($o_id === $end_id) break;
 
         $c_name = $id2name[$c_id];
-        if (in_array(mb_substr($c_name, 0, 2), ['楼梯', '电梯', '南北', '北南'])) {
+        if (in_array(mb_substr($c_name, 0, 2), ['入口', '楼梯', '电梯', '南北', '北南'])) {
             array_push($ret, [$c_name, $name2sn[$c_name]]);
         }
         $o_id = $c_id;
     }
 }
 array_push($ret, [$end_name, $name2sn[$end_name]]);
+
+//var_export($ret); die();
 
 $filtered_ret = [];
 array_push($filtered_ret, reset($ret));
@@ -85,6 +93,7 @@ for ($i = 1; $i < count($ret) - 1; ++$i) {
 array_push($filtered_ret, end($ret));
 
 echo json_encode([
+    'code' => 0,
     'cost' => $cost,
     'path' => $filtered_ret,
 ]);

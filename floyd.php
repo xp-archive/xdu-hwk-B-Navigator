@@ -60,12 +60,10 @@ function push_name2id_atomic(array $names, $level) {
         array_push($ids, $id);
     }
 
-    global $matrix;
     foreach ($ids as $a) {
         foreach ($ids as $b) {
             if ($a == $b) continue;
-            $matrix[$a][$b] = 0;
-            $matrix[$b][$a] = 0;
+            set_cost($a, $b, 0);
         }
     }
 
@@ -91,9 +89,16 @@ function push_name2id($level, $name) {
 }
 
 function set_cost($a_id, $b_id, $cost) {
-    global $matrix;
-    $matrix[$a_id][$b_id] = $cost;
-    $matrix[$b_id][$a_id] = $cost;
+    global $matrix, $id2name;
+    $a_name = $id2name[$a_id];
+    $b_name = $id2name[$b_id];
+    if (strpos($a_name, '楼外入口') === 0 && strpos($b_name, '入口') === 0) {
+        $matrix[$a_id][$b_id] = $cost;
+        $matrix[$b_id][$a_id] = PHP_INT_MAX;
+    } else {
+        $matrix[$a_id][$b_id] = $cost;
+        $matrix[$b_id][$a_id] = $cost;
+    }
 }
 
 function add_record($level, array $record) {
@@ -107,9 +112,9 @@ function connect_stairs() {
 
     foreach ($stairs as $stair_name => $stair_levels) {
         if (strpos($stair_name, '电梯') === 0) {
-            $cost = PHP_INT_MAX;
+            $cost = 0; //PHP_INT_MAX;
         } else {
-            $cost = ctype_alpha(mb_substr($stair_name, 3, 1)) ? 70 : 35;
+            $cost = is_numeric(mb_substr($stair_name, 3, 1)) ? 35 : 70;
         }
 
         reset($stair_levels);
@@ -145,7 +150,6 @@ function floyd() {
     foreach ($distance as $a => $row) {
         foreach ($row as $b => $cost) {
             if ($cost == PHP_INT_MAX) continue;
-
             $path[$a][$b] = $b;
         }
     }
@@ -165,7 +169,7 @@ function floyd() {
 }
 
 function save_array($filename, array &$array) {
-    file_put_contents($filename, "<?php\nreturn " . var_export($array, true) . "\n?>");
+    file_put_contents($filename, "<?php\n return " . var_export($array, true) . "\n?>");
 }
 
 function generate($strategy) {
