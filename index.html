@@ -39,7 +39,7 @@
     <hr/>
     <form id="myform">
         <div class="form-group col-xs-7">
-            <label for="start_name">入口</label>
+            <label for="start_name">起点</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="start_name" name="start_name" required value="入口1">
                 <span class="input-group-btn">
@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="form-group col-xs-5">
-            <label for="end_name">目标</label>
+            <label for="end_name">终点</label>
             <input type="text" class="form-control" id="end_name" name="end_name" required value="433">
         </div>
         <div class="form-group col-xs-12">
@@ -133,21 +133,29 @@
         });
 
         function mapshow(ret) {
+            if (ret.path.length == 0) {
+                alert('不可达! 请检查输入.');
+                return ;
+            }
             var $tbl = $('#myret');
             $tbl.empty();
             for (var i = 0; i < ret.path.length; ++i) {
                 var $tr = $('<tr></tr>');
                 var $td = $('<td></td>');
                 var $a = $('<a></a>');
+                var $div = $('<div></div>');
+                var $img = $('<img/>');
                 $a.attr('href', '#');
                 $a.addClass('btn btn-block');
-                $a.data('src', 'static/' + ret.path[i][1] + '.png');
-                $a.on('click', function() {
-                    $('#img-map').attr('src', '').attr('src', $(this).data('src'));
-                    $('#modal-map').modal('show');
-                });
+                $div.addClass('collapse');
+                $img.attr('src', 'static/' + ret.path[i][1] + '.png');
+                $div.append($img);
+                $a.on('click', function($div) {
+                    return function() { $div.collapse('toggle'); }
+                }($div));
                 $a.text(ret.path[i][0]);
                 $td.append($a);
+                $td.append($div);
                 $tr.append($td);
                 $tbl.append($tr);
             }

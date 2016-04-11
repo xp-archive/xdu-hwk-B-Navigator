@@ -107,7 +107,7 @@ function connect_stairs() {
 
     foreach ($stairs as $stair_name => $stair_levels) {
         if (strpos($stair_name, '电梯') === 0) {
-            $cost = 0;
+            $cost = PHP_INT_MAX;
         } else {
             $cost = ctype_alpha(mb_substr($stair_name, 3, 1)) ? 70 : 35;
         }
