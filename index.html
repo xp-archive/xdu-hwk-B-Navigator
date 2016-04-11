@@ -29,8 +29,8 @@
     <h3>B-Navigator</h3>
     <div>
         <h5 id="ret-name">结果将在这里显示.</h5>
-        <table id="myret" class="table table-bordered table-striped">
-        </table>
+        <ul id="myret">
+        </ul>
     </div>
     <hr/>
     <form id="myform">
@@ -135,8 +135,7 @@
             var $tbl = $('#myret');
             $tbl.empty();
             for (var i = 0; i < ret.path.length; ++i) {
-                var $tr = $('<tr></tr>');
-                var $td = $('<td></td>');
+                var $li = $('<li></li>');
                 var $a = $('<a></a>');
                 $a.addClass('btn btn-block');
                 $a.data('src', 'static/' + ret.path[i][1] + '.png');
@@ -145,8 +144,7 @@
                     $('#modal-map').modal('show');
                 });
                 $a.text(ret.path[i][0]);
-                $td.append($a);
-                $tr.append($td);
+                $li.append($a);
                 $tbl.append($tr);
             }
 
