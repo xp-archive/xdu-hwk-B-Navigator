@@ -13,14 +13,28 @@
     <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <script src="static/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <style>
+        img {
+            width: 100%;
+        }
+        #modal-map .modal-content {
+            padding: 2px;
+        }
+        #modal-map .modal-dialog{
+            transform: rotate(90deg);
+        }
+
+    </style>
+
 </head>
 <body>
 <div class="container">
     <h3>B-Navigator</h3>
     <div>
         <h5>结果将在这里显示.</h5>
-        <ul id="myret">
-        </ul>
+        <table id="myret" class="table table-bordered table-striped">
+        </table>
     </div>
     <hr/>
     <form id="myform">
@@ -44,7 +58,7 @@
 </div>
 
 <div class="modal" id="modal-start" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form id="form-start">
                 <div class="modal-header">
@@ -54,7 +68,7 @@
                     <h4 class="modal-title" id="label-start">入口</h4>
                 </div>
                 <div class="modal-body">
-                    <img src="static/entry.png"/>
+                    <img src="static/entry.jpg"/>
                     <select id="select-name" class="form-control">
                         <option value="">(请选择)</option>
                         <optgroup label="宿舍区">
@@ -83,12 +97,6 @@
         </div>
     </div>
 </div>
-
-<style>
-    #img-map {
-        width: 100%;
-    }
-</style>
 
 <div class="modal" id="modal-map" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -125,20 +133,23 @@
         });
 
         function mapshow(ret) {
-            var $ul = $('#myret');
-            $ul.empty();
+            var $tbl = $('#myret');
+            $tbl.empty();
             for (var i = 0; i < ret.path.length; ++i) {
-                var $li = $('<li></li>');
+                var $tr = $('<tr></tr>');
+                var $td = $('<td></td>');
                 var $a = $('<a></a>');
                 $a.attr('href', '#');
+                $a.addClass('btn btn-block');
                 $a.data('src', 'static/' + ret.path[i][1] + '.png');
                 $a.on('click', function() {
                     $('#img-map').attr('src', '').attr('src', $(this).data('src'));
                     $('#modal-map').modal('show');
                 });
                 $a.text(ret.path[i][0]);
-                $li.append($a);
-                $ul.append($li);
+                $td.append($a);
+                $tr.append($td);
+                $tbl.append($tr);
             }
         }
     });

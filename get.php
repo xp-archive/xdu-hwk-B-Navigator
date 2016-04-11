@@ -63,18 +63,28 @@ array_push($ret, [$start_name, $name2sn[$start_name]]);
 if ($cost !== PHP_INT_MAX) {
     $o_id = $start_id;
     $c_id = $start_id;
-    while ($o_id !== $end_id) {
+    while (true) {
         $c_id = $path[$o_id][$end_id];
+        if ($o_id === $end_id) break;
 
         $c_name = $id2name[$c_id];
-        if (strpos($c_name, '岔路') !== 0) {
+        if (in_array(mb_substr($c_name, 0, 2), ['楼梯', '电梯', '南北', '北南'])) {
             array_push($ret, [$c_name, $name2sn[$c_name]]);
         }
         $o_id = $c_id;
     }
 }
+array_push($ret, [$end_name, $name2sn[$end_name]]);
+
+$filtered_ret = [];
+array_push($filtered_ret, reset($ret));
+for ($i = 1; $i < count($ret) - 1; ++$i) {
+    if ($ret[$i-1][1] === $ret[$i][1] && $ret[$i][1] === $ret[$i+1][1]) continue;
+    array_push($filtered_ret, $ret[$i]);
+}
+array_push($filtered_ret, end($ret));
 
 echo json_encode([
     'cost' => $cost,
-    'path' => $ret,
+    'path' => $filtered_ret,
 ]);
