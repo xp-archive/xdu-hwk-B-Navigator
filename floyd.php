@@ -13,6 +13,10 @@ $stairs = [];
 $distance = [];
 $path = [];
 
+$elevator_cost = 0;
+$s_stair_cost = 40;
+$n_stair_cost = 70;
+
 function expand_matrix() {
     global $matrix, $matrix_count;
 
@@ -109,12 +113,13 @@ function add_record($level, array $record) {
 
 function connect_stairs() {
     global $stairs, $name2id;
+    global $elevator_cost, $s_stair_cost, $n_stair_cost;
 
     foreach ($stairs as $stair_name => $stair_levels) {
         if (strpos($stair_name, '电梯') === 0) {
-            $cost = 0; //PHP_INT_MAX;
+            $cost = $elevator_cost;
         } else {
-            $cost = is_numeric(mb_substr($stair_name, 3, 1)) ? 35 : 70;
+            $cost = is_numeric(mb_substr($stair_name, 3, 1)) ? $s_stair_cost : $n_stair_cost;
         }
 
         reset($stair_levels);
@@ -182,6 +187,12 @@ function generate($strategy) {
     save_array("{$strategy}/id2name.php", $id2name);
 }
 
+$strategy = $argc > 1 ? $argv[1] : 'debug';
+
+if ($strategy == 'no-elevator') {
+    $elevator_cost = PHP_INT_MAX;
+}
+
 make_matrix();
 floyd();
-generate($argc > 1 ? $argv[1] : 'debug');
+generate($strategy);

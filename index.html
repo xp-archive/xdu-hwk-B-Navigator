@@ -48,6 +48,13 @@
             <input type="text" class="form-control" id="end_name" name="end_name" required value="443">
         </div>
         <div class="form-group col-xs-12">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="strategy" name="strategy"> 不使用电梯 ?
+                </label>
+            </div>
+        </div>
+        <div class="form-group col-xs-12">
             <button type="submit" class="btn btn-primary btn-block">查询</button>
         </div>
     </form>
@@ -112,12 +119,14 @@
         $('#myform').on('submit', function() {
             var start_name = $('#start_name').val();
             var end_name = $('#end_name').val();
+            var strategy = $('#strategy')[0].checked ? 'no-elevator' : 'debug';
             $.ajax({
                 url: 'get.php',
                 method: 'get',
                 data: {
                     'start': start_name,
-                    'end': end_name
+                    'end': end_name,
+                    'strategy': strategy
                 },
                 dataType: 'json',
                 success: function(ret) {

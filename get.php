@@ -29,9 +29,9 @@ function add_id_to_array(&$arr, $name) {
 
 function name2id($name) {
     $ret = [];
-    if (is_numeric($name)) {
-        add_id_to_array($ret, "{$name}西");
+    if (is_numeric($name) || $name == '丁香') {
         add_id_to_array($ret, "{$name}东");
+        add_id_to_array($ret, "{$name}西");
     } else {
         add_id_to_array($ret, $name);
     }
