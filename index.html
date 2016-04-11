@@ -21,10 +21,6 @@
         #modal-map .modal-content {
             padding: 2px;
         }
-        #modal-map .modal-dialog{
-            transform: rotate(90deg);
-        }
-
     </style>
 
 </head>
@@ -32,7 +28,7 @@
 <div class="container">
     <h3>B-Navigator</h3>
     <div>
-        <h5>结果将在这里显示.</h5>
+        <h5 id="ret-name">结果将在这里显示.</h5>
         <table id="myret" class="table table-bordered table-striped">
         </table>
     </div>
@@ -142,24 +138,19 @@
                 var $tr = $('<tr></tr>');
                 var $td = $('<td></td>');
                 var $a = $('<a></a>');
-                var $div = $('<div></div>');
-                var $img = $('<img/>');
-                $a.attr('href', '#');
                 $a.addClass('btn btn-block');
-                $div.addClass('collapse table-responsive');
-                $img.attr('src', 'static/' + ret.path[i][1] + '.png');
-                $div.append($img);
-                $a.on('click', function($div) {
-                    return function() { $div.collapse('toggle'); }
-                }($div));
+                $a.data('src', 'static/' + ret.path[i][1] + '.png');
+                $a.on('click', function() {
+                    $('#img-map').attr('src', $(this).data('src'));
+                    $('#modal-map').modal('show');
+                });
                 $a.text(ret.path[i][0]);
                 $td.append($a);
-                $td.append($div);
                 $tr.append($td);
                 $tbl.append($tr);
             }
 
-            alert('大概路程: ' + ret.cost);
+            $('#ret-name').val('大概路程: ' + ret.cost + '步');
         }
     });
 </script>
