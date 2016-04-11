@@ -28,11 +28,11 @@
 <div class="container">
     <h3>B-Navigator</h3>
     <div>
-        <h5 id="ret-name">结果将在这里显示.</h5>
+        <hr/>
+        <h5 id="ret-name"></h5>
         <table id="myret" class="table table-bordered table-striped">
         </table>
     </div>
-    <hr/>
     <form id="myform">
         <div class="form-group col-xs-7">
             <label for="start_name">起点</label>
@@ -150,7 +150,7 @@
                 $tbl.append($tr);
             }
 
-            $('#ret-name').val('大概路程: ' + ret.cost + '步');
+            $('#ret-name').text('大概路程: ' + ret.cost + '步');
         }
     });
 </script>
